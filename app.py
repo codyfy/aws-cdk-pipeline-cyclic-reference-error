@@ -2,10 +2,13 @@
 
 from aws_cdk import core
 
-from cdk_pipeline_mwe.cdk_pipeline_mwe_stack import CdkPipelineMweStack
+from cdk_pipeline_mwe.asg import AutoScaling
+from cdk_pipeline_mwe.pipeline import Pipeline
 
 
 app = core.App()
-CdkPipelineMweStack(app, "cdk-pipeline-mwe")
+asg_stack = AutoScaling(app, "asg-stack")
+pipe_stack = Pipeline(app, "pipeline-stack", asg_stack.asg)
+pipe_stack.add_dependency(asg_stack)
 
 app.synth()
